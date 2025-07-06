@@ -1,0 +1,17 @@
+
+services:
+  db:
+    image: postgres
+    container_name: ecommerce-db
+    restart: always
+    ports:
+      - "5433:5432"   # Use a non-conflicting host port
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: ecommerce
+    volumes:
+      - ecommerce_pgdata:/var/lib/postgresql/data
+
+volumes:
+  ecommerce_pgdata:
