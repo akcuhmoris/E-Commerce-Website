@@ -1,0 +1,17 @@
+openapi: 3.0.0
+info:
+  title: E-commerce API
+  version: 1.0.0
+paths:
+  /api/products:
+    get:
+      summary: Get all products
+      responses:
+        '200':
+          description: A list of products
+  /api/auth/register:
+    post:
+      summary: Register a new user
+      responses:
+        '201':
+          description: User created
