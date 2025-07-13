@@ -1,13 +1,27 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { PrismaClient } = require("@prisma/client");
+const Joi = require("joi");
+const { registerSchema, loginSchema } = require('../validators/authValidator');
+
+
 
 const prisma = new PrismaClient();
 const JWT_SECRET = process.env.JWT_SECRET;
 
 // Register a new user
 exports.register = async(req, res) => {
+    const { error } = registerSchema.validate(req.body);
+    if (error) {
+        return res.status(400).json({ message: error.details[0].message });
+    }
+
     const { email, password, name } = req.body;
+    const schema = Joi.object({
+        email: Joi.string().email().required(),
+        password: Joi.string().min(6).required(),
+        name: Joi.string().min(2).required()
+    });
 
     try {
         // Check if user exists
@@ -38,6 +52,11 @@ exports.register = async(req, res) => {
 // Login an existing user
 exports.login = async(req, res) => {
     const { email, password } = req.body;
+    const { error } = loginSchema.validate(req.body);
+    if (error) {
+        return res.status(400).json({ message: error.details[0].message });
+    }
+
 
     try {
         // Find user

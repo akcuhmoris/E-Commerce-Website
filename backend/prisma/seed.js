@@ -1,24 +1,33 @@
-const { PrismaClient } = require("@prisma/client");
+const { PrismaClient } = require('@prisma/client');
+const bcrypt = require('bcrypt');
+
 const prisma = new PrismaClient();
 
 async function main() {
+    // 1) Seed some products
     await prisma.product.createMany({
-        data: [{
-                name: "T-Shirt",
-                description: "Soft cotton t-shirt",
-                price: 19.99,
-                imageUrl: "https://example.com/tshirt.jpg"
-            },
-            {
-                name: "Sneakers",
-                description: "Comfortable running shoes",
-                price: 59.99,
-                imageUrl: "https://example.com/sneakers.jpg"
-            }
-        ]
+        data: [
+            { name: 'Hat', price: 14.99, description: 'A stylish hat' },
+            { name: 'Jacket', price: 99.99, description: 'Warm winter jacket' },
+            { name: 'Sneakers', price: 59.99, description: 'Comfortable running shoes' }
+        ],
+        skipDuplicates: true
     });
 
-    console.log("Seed data created!");
+    // 2) Seed an admin user
+    const hashed = await bcrypt.hash('admin123', 10);
+    await prisma.user.upsert({
+        where: { email: 'admin@example.com' },
+        update: {},
+        create: {
+            email: 'admin@example.com',
+            password: hashed,
+            name: 'Admin User',
+            role: 'ADMIN'
+        }
+    });
+
+    console.log('🌱  Seed data created!');
 }
 
 main()

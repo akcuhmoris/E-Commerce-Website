@@ -23,3 +23,9 @@ exports.protect = (req, res, next) => {
         return res.status(401).json({ message: "Invalid token" });
     }
 };
+exports.adminOnly = (req, res, next) => {
+    if (req.user.role !== "ADMIN") {
+        return res.status(403).json({ message: "Forbidden: Admins only" });
+    }
+    next();
+};

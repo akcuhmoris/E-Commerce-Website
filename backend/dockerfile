@@ -2,9 +2,22 @@ FROM node:20-alpine
 
 WORKDIR /app
 
+# Copy package files and install dependencies first (better caching)
+# build stage
+FROM node:20-alpine AS builder
+WORKDIR /app
 COPY package*.json ./
-RUN npm install
-
+RUN npm ci
 COPY . .
+RUN npx prisma generate
 
-CMD ["npm", "run", "dev"]
+# production stage
+FROM node:20-alpine
+WORKDIR /app
+COPY --from=builder /app .  
+ENV NODE_ENV=production
+EXPOSE 4000
+CMD ["node", "src/index.js"]
+
+
+
