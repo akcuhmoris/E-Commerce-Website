@@ -1,11 +1,10 @@
-// src/components/ProductCard.js
 export default function ProductCard({ product }) {
   return (
-    <div className="border rounded-lg shadow p-4 flex flex-col">
+    <div className="bg-white border rounded-lg shadow p-4 flex flex-col">
       <img
         src={product.imageUrl}
         alt={product.name}
-        className="h-48 object-cover mb-4 rounded"
+        className="h-48 w-full object-cover mb-4 rounded"
       />
       <h3 className="text-lg font-semibold mb-2">{product.name}</h3>
       <p className="text-gray-600 mb-4">${product.price.toFixed(2)}</p>

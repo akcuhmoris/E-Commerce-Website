@@ -14,7 +14,7 @@ export default function ProductPage() {
   if (!product) return <div>Loading...</div>;
 
   return (
-    <div className="p-6">
+    <div className="bg-white rounded-lg shadow overflow-hidden">
       <ProductCard product={product} />
     </div>
   );
