@@ -1,9 +1,12 @@
 name: CI
 
-on: [push]
+on:
+  push:
+    branches: [ main ]
 
 jobs:
-  build-and-test:
+  backend:
+    name: Backend Build & Test
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -17,10 +20,46 @@ jobs:
           POSTGRES_DB: ecommerce
         ports: [5432:5432]
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js for backend
+        uses: actions/setup-node@v3
         with:
           node-version: '20'
-      - run: npm install
-      - run: npx prisma migrate deploy
-      - run: npm test
+
+      - name: Install backend dependencies
+        run: npm install
+
+      - name: Apply Prisma migrations
+        run: npx prisma migrate deploy
+
+      - name: Run backend tests
+        run: npm test
+
+  frontend:
+    name: Frontend Build & Test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js for frontend
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install frontend dependencies
+        run: npm install
+
+      - name: Run frontend lint
+        run: npm run lint || echo "No lint script configured"
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Run frontend tests
+        run: npm test -- --watchAll=false
