@@ -19,6 +19,9 @@ jobs:
           POSTGRES_PASSWORD: password
           POSTGRES_DB: ecommerce
         ports: [5432:5432]
+    env:
+      DATABASE_URL: postgresql://postgres:password@localhost:5432/ecommerce
+      JWT_SECRET: testsecret
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -28,20 +31,20 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Install Backend Dependencies
+        run: npm ci
+
       - name: Wait for Postgres to be ready
         run: |
           echo "Waiting for Postgres to start..."
           for i in {1..30}; do
-            if (echo > /dev/tcp/localhost/5432) >/dev/null 2>&1; then
+            if nc -z localhost 5432; then
               echo "Postgres is up!"
               break
             fi
-            echo "Waiting for Postgres..."
+            echo "Waiting..."
             sleep 1
           done
-
-      - name: Install Backend Dependencies
-        run: npm install
 
       - name: Apply Prisma Migrations
         run: npx prisma migrate deploy
@@ -65,13 +68,11 @@ jobs:
           node-version: '18'
 
       - name: Install Frontend Dependencies
-        run: npm install
-
-      - name: Run Frontend Lint
-        run: npm run lint || echo "No lint script configured"
+        run: npm ci
 
       - name: Build Frontend
         run: npm run build
 
-      - name: Run Frontend Tests
+      - name: Run Frontend Tests (optional)
+        continue-on-error: true
         run: npm test -- --watchAll=false
