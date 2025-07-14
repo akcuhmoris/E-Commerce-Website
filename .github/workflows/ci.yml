@@ -20,21 +20,33 @@ jobs:
           POSTGRES_DB: ecommerce
         ports: [5432:5432]
     steps:
-      - name: Checkout code
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Setup Node.js for backend
+      - name: Setup Node.js for Backend
         uses: actions/setup-node@v3
         with:
           node-version: '20'
 
-      - name: Install backend dependencies
+      - name: Wait for Postgres to be ready
+        run: |
+          echo "Waiting for Postgres to start..."
+          for i in {1..30}; do
+            if (echo > /dev/tcp/localhost/5432) >/dev/null 2>&1; then
+              echo "Postgres is up!"
+              break
+            fi
+            echo "Waiting for Postgres..."
+            sleep 1
+          done
+
+      - name: Install Backend Dependencies
         run: npm install
 
-      - name: Apply Prisma migrations
+      - name: Apply Prisma Migrations
         run: npx prisma migrate deploy
 
-      - name: Run backend tests
+      - name: Run Backend Tests
         run: npm test
 
   frontend:
@@ -44,22 +56,22 @@ jobs:
       run:
         working-directory: frontend
     steps:
-      - name: Checkout code
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Setup Node.js for frontend
+      - name: Setup Node.js for Frontend
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
-      - name: Install frontend dependencies
+      - name: Install Frontend Dependencies
         run: npm install
 
-      - name: Run frontend lint
+      - name: Run Frontend Lint
         run: npm run lint || echo "No lint script configured"
 
-      - name: Build frontend
+      - name: Build Frontend
         run: npm run build
 
-      - name: Run frontend tests
+      - name: Run Frontend Tests
         run: npm test -- --watchAll=false
