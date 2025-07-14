@@ -17,6 +17,25 @@ A full-stack e-commerce application demonstrating a production-ready backend (No
 ---
 
 ## 📁 Repository Structure
+.
+├── backend
+│   ├── docker-compose.yml
+│   ├── dockerfile
+│   ├── nodemon.json
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── prisma
+│   ├── src
+│   └── swagger.yaml
+├── docker-compose.yml
+├── frontend
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── public
+│   ├── README.md
+│   └── src
+└── README.md
+
 [![Stars](https://img.shields.io/github/stars/akcuhmoris/E-Commerce-Website.svg?style=social)](https://github.com/akcuhmoris/E-Commerce-Website/stargazers)
 [![Forks](https://img.shields.io/github/forks/akcuhmoris/E-Commerce-Website.svg?style=social)](https://github.com/akcuhmoris/E-Commerce-Website/network/members)
 [![License](https://img.shields.io/github/license/akcuhmoris/E-Commerce-Website.svg)](LICENSE)
