@@ -15,7 +15,6 @@ import Layout from './components/Layout';
 export default function App() {
   return (
     <BrowserRouter>
-    <NavBar />
     <Layout />
       <Routes>
         <Route path="/" element={<Home />} />
