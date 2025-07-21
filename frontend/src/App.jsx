@@ -8,7 +8,7 @@ import Cart from './pages/Cart';
 import Dashboard from './pages/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import NavBar from './components/NavBar';
-import Checkout from './pages/Checkout';
+//import Checkout from './pages/Checkout';
 import Confirmation from './pages/Confirmation';
 import Layout from './components/Layout';
 
@@ -31,7 +31,7 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/checkout" element={<Checkout />} />
+        {/* <Route path="/checkout" element={<Checkout />} /> */}
         <Route path="/confirmation" element={<Confirmation />} />
       </Routes>
     </BrowserRouter>
