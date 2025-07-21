@@ -9,13 +9,14 @@ import Dashboard from './pages/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';
 import NavBar from './components/NavBar';
 //import Checkout from './pages/Checkout';
+import AdminAddProduct from './pages/Admin/AdminAddProduct';
 import Confirmation from './pages/Confirmation';
 import Layout from './components/Layout';
 
 export default function App() {
   return (
     <BrowserRouter>
-    <Layout />
+      <Layout />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/products/:id" element={<ProductPage />} />
@@ -32,6 +33,14 @@ export default function App() {
         />
         {/* <Route path="/checkout" element={<Checkout />} /> */}
         <Route path="/confirmation" element={<Confirmation />} />
+        <Route
+          path="/admin/add-product"
+          element={
+            <ProtectedRoute requireAdmin>
+              <AdminAddProduct />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

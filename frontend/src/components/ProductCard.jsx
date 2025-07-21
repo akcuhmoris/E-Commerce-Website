@@ -1,3 +1,4 @@
+import React from "react";
 export default function ProductCard({ product }) {
   return (
     <div className="bg-white border rounded-lg shadow p-4 flex flex-col">
